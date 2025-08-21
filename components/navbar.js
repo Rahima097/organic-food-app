@@ -1,9 +1,16 @@
 "use client"
 import Link from "next/link"
 import { useState } from "react"
+import { useSession, signOut } from "next-auth/react"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
+  const { data: session, status } = useSession()
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" })
+  }
 
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 border-b border-gray-200">
@@ -33,18 +40,47 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Auth Buttons */}
+          {/* Desktop Auth Buttons and Cart */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link href="/login">
-              <div className="px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded-md hover:bg-green-50 transition-colors cursor-pointer">
-                Login
-              </div>
+            <Link href="/cart" className="relative p-2 text-gray-700 hover:text-green-600 transition-colors">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8"
+                />
+              </svg>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </Link>
-            <Link href="/dashboard/add-product">
-              <div className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors cursor-pointer">
-                Dashboard
-              </div>
-            </Link>
+            {status === "loading" ? (
+              <div className="px-4 py-2 text-sm font-medium text-gray-400">Loading...</div>
+            ) : session ? (
+              <>
+                <span className="text-sm text-gray-700">Hello, {session.user?.name}</span>
+                <Link href="/dashboard/add-product">
+                  <div className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors cursor-pointer">
+                    Dashboard
+                  </div>
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded-md hover:bg-green-50 transition-colors"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link href="/login">
+                <div className="px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded-md hover:bg-green-50 transition-colors cursor-pointer">
+                  Login
+                </div>
+              </Link>
+            )}
           </div>
 
           <div className="md:hidden">
@@ -112,18 +148,48 @@ export default function Navbar() {
               >
                 Contact
               </Link>
+              <Link
+                href="/cart"
+                className="flex items-center px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8"
+                  />
+                </svg>
+                Cart {cartCount > 0 && `(${cartCount})`}
+              </Link>
               <div className="pt-4 pb-3 border-t border-gray-200">
                 <div className="flex flex-col space-y-3 px-3">
-                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                    <div className="w-full px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded-md hover:bg-green-50 transition-colors cursor-pointer text-center">
-                      Login
-                    </div>
-                  </Link>
-                  <Link href="/dashboard/add-product" onClick={() => setIsMenuOpen(false)}>
-                    <div className="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors cursor-pointer text-center">
-                      Dashboard
-                    </div>
-                  </Link>
+                  {session ? (
+                    <>
+                      <span className="text-sm text-gray-700 px-3">Hello, {session.user?.name}</span>
+                      <Link href="/dashboard/add-product" onClick={() => setIsMenuOpen(false)}>
+                        <div className="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors cursor-pointer text-center">
+                          Dashboard
+                        </div>
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleSignOut()
+                          setIsMenuOpen(false)
+                        }}
+                        className="w-full px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded-md hover:bg-green-50 transition-colors"
+                      >
+                        Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                      <div className="w-full px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded-md hover:bg-green-50 transition-colors cursor-pointer text-center">
+                        Login
+                      </div>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

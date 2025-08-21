@@ -1,52 +1,42 @@
+"use client"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 
-// Mock product data
-const products = [
-  {
-    id: 1,
-    name: "Organic Green Energy Smoothie",
-    description: "Boost your energy with our premium organic green smoothie blend",
-    price: 29.99,
-    image: "/organic-bananas.png",
-  },
-  {
-    id: 2,
-    name: "Fresh Organic Berries Mix",
-    description: "Hand-picked organic berries bursting with natural flavors",
-    price: 19.99,
-    image: "/organic-strawberries.png",
-  },
-  {
-    id: 3,
-    name: "Organic Breakfast Cereal",
-    description: "Start your day right with our nutritious organic cereal",
-    price: 12.99,
-    image: "/Organic Breakfast Cereal.png",
-  },
-  {
-    id: 4,
-    name: "Natural Energy Bars",
-    description: "Perfect on-the-go snack made with organic ingredients",
-    price: 15.99,
-    image: "/almond-butter-jar.png",
-  },
-  {
-    id: 5,
-    name: "Organic Fruit Juice",
-    description: "Pure organic fruit juice with no added sugars",
-    price: 8.99,
-    image: "/green-tea-package.png",
-  },
-  {
-    id: 6,
-    name: "Organic Milk",
-    description: "Fresh organic milk from grass-fed cows",
-    price: 6.99,
-    image: "/organic-honey-jar.png",
-  },
-]
-
 export default function ProductsPage() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("/api/products")
+        const data = await response.json()
+        setProducts(data)
+      } catch (error) {
+        console.error("Error fetching products:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <main className="py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading products...</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen">
 
@@ -62,7 +52,7 @@ export default function ProductsPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((product) => (
               <div
-                key={product.id}
+                key={product._id}
                 className="group bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-shadow"
               >
                 <div className="p-6">
@@ -77,7 +67,7 @@ export default function ProductsPage() {
                   <p className="text-gray-600 mb-4">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold text-green-600">${product.price}</span>
-                    <Link href={`/products/${product.id}`}>
+                    <Link href={`/products/${product._id}`}>
                       <div className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors cursor-pointer group-hover:bg-green-700">
                         View Details
                       </div>
