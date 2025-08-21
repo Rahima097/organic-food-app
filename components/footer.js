@@ -11,7 +11,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                 <span className="text-green-600 font-bold text-lg">🌱</span>
               </div>
-              <span className="font-serif font-bold text-xl">Organic</span>
+              <span className="font-serif font-bold text-xl">Organic Food</span>
             </div>
             <p className="text-green-100">
               Fresh organic food delivered to your door. Nourish your body with natures finest ingredients.

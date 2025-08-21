@@ -21,7 +21,7 @@ export default function Navbar() {
             <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-lg">🌱</span>
             </div>
-            <span className="font-serif font-bold text-xl text-gray-900">Organic</span>
+            <span className="font-serif font-bold text-xl text-gray-900">Organic Food</span>
           </Link>
 
           {/* Desktop Navigation Links */}
