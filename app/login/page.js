@@ -41,7 +41,7 @@ export default function LoginPage() {
         <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
             <div className="p-6 text-center border-b border-gray-200">
-              <h1 className="font-serif text-2xl font-bold text-gray-900">Welcome Back</h1>
+              <h1 className="font-serif text-2xl font-bold text-green-600">Welcome To Organic Food</h1>
               <p className="text-gray-600 mt-2">Sign in to your account to continue</p>
             </div>
             <div className="p-6 space-y-6">
