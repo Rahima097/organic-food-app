@@ -1,4 +1,5 @@
 "use client"
+
 import { useState, useEffect } from "react"
 import Link from "next/link"
 
@@ -15,8 +16,7 @@ export default function Hero() {
         "Food if it's not organic, is not a good food",
         "No medicine can heal you better than organic food does",
       ],
-      image:
-        "https://i.ibb.co.com/Kp46Jz9p/1.png",
+      image: "https://i.ibb.co.com/Kp46Jz9p/1.png",
       badge: "50% OFF",
     },
     {
@@ -42,25 +42,17 @@ export default function Hero() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
-    }, 5000)
+    }, 6000)
     return () => clearInterval(timer)
-  }, [slides.length])
+  }, [])
 
-  const goToSlide = (index) => {
-    setCurrentSlide(index)
-  }
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length)
-  }
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
-  }
+  const goToSlide = (index) => setCurrentSlide(index)
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length)
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
 
   return (
     <section className="relative bg-gradient-to-br from-gray-50 to-white overflow-hidden">
-      <div className="relative h-[500px] lg:h-[600px]">
+      <div className="relative min-h-[750px] sm:min-h-[550px] md:min-h-[600px] lg:min-h-[700px]">
         {slides.map((slide, index) => (
           <div
             key={index}
@@ -69,20 +61,23 @@ export default function Hero() {
             }`}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-              <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
+              <div className="flex flex-col-reverse md:grid md:grid-cols-2 gap-8 md:gap-12 items-center w-full py-8 md:py-0">
                 {/* Content */}
-                <div className="space-y-8">
+                <div className="space-y-6 text-center md:text-left">
                   <div className="space-y-4">
-                    <h1 className="font-serif text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                      {slide.title} <span className="text-green-600">{slide.highlight}</span>
+                    <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                      {slide.title}{" "}
+                      <span className="text-green-600">{slide.highlight}</span>
                     </h1>
-                    <p className="text-lg text-gray-600 max-w-lg">{slide.description}</p>
+                    <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto md:mx-0">
+                      {slide.description}
+                    </p>
                   </div>
 
-                  <div className="space-y-4">
-                    {slide.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center space-x-3">
-                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="space-y-3">
+                    {slide.features.map((feature, i) => (
+                      <div key={i} className="flex items-center justify-center md:justify-start space-x-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center">
                           <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path
                               fillRule="evenodd"
@@ -91,13 +86,13 @@ export default function Hero() {
                             />
                           </svg>
                         </div>
-                        <span className="text-gray-900">{feature}</span>
+                        <span className="text-gray-900 text-sm sm:text-base">{feature}</span>
                       </div>
                     ))}
                   </div>
 
                   <Link href="/products">
-                    <div className="inline-flex items-center px-8 py-3 text-lg font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors cursor-pointer">
+                    <div className="inline-flex items-center justify-center px-6 py-3 text-sm sm:text-base font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors">
                       Shop Now
                       <svg className="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path
@@ -111,25 +106,22 @@ export default function Hero() {
                 </div>
 
                 {/* Product Image */}
-                <div className="relative">
-                  <div className="relative">
-                    <img
-                      src={slide.image || "/placeholder.svg"}
-                      alt={`Organic product ${index + 1}`}
-                      className="w-full h-auto max-w-lg mx-auto"
-                    />
-                    {/* Badge */}
-                    <div
-                      className={`absolute -top-4 -right-4 rounded-full w-20 h-20 flex items-center justify-center font-bold text-sm text-white ${
-                        slide.badge === "50% OFF"
-                          ? "bg-red-500"
-                          : slide.badge === "NEW"
-                            ? "bg-blue-500"
-                            : "bg-orange-500"
-                      }`}
-                    >
-                      {slide.badge}
-                    </div>
+                <div className="relative flex justify-center">
+                  <img
+                    src={slide.image || "/placeholder.svg"}
+                    alt={`Slide ${index + 1}`}
+                    className="w-full max-w-[280px] sm:max-w-sm md:max-w-md lg:max-w-lg h-auto mx-auto"
+                  />
+                  <div
+                    className={`absolute -top-4 -right-4 rounded-full w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center font-bold text-xs sm:text-sm text-white ${
+                      slide.badge === "50% OFF"
+                        ? "bg-red-500"
+                        : slide.badge === "NEW"
+                        ? "bg-blue-500"
+                        : "bg-orange-500"
+                    }`}
+                  >
+                    {slide.badge}
                   </div>
                 </div>
               </div>
@@ -138,24 +130,26 @@ export default function Hero() {
         ))}
       </div>
 
+      {/* Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-colors z-10"
+        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-colors z-10"
       >
-        <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-colors z-10"
+        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-colors z-10"
       >
-        <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </button>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
+      {/* Dots */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
         {slides.map((_, index) => (
           <button
             key={index}
