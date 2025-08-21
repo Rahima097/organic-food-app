@@ -1,7 +1,9 @@
 "use client"
+
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import toast from "react-hot-toast"
 
 export default function AddProductPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -11,11 +13,12 @@ export default function AddProductPage() {
     price: "",
     image: "",
   })
+
   const router = useRouter()
   const { data: session, status } = useSession()
 
   useEffect(() => {
-    if (status === "loading") return // Still loading
+    if (status === "loading") return
     if (!session) {
       router.push("/login")
     }
@@ -38,7 +41,7 @@ export default function AddProductPage() {
       })
 
       if (response.ok) {
-        alert("Product added successfully!")
+        toast.success("Product added successfully!")
         setFormData({
           name: "",
           description: "",
@@ -50,7 +53,7 @@ export default function AddProductPage() {
       }
     } catch (error) {
       console.error("Error adding product:", error)
-      alert("Failed to add product. Please try again.")
+      toast.error("Failed to add product. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -59,26 +62,13 @@ export default function AddProductPage() {
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
-        </div>
-      </div>
-    )
-  }
-
-  if (!session) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Redirecting to login...</h2>
-        </div>
+        <h2 className="text-2xl font-bold">Loading...</h2>
       </div>
     )
   }
 
   return (
     <div className="min-h-screen">
-
       <main className="py-16">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -88,6 +78,7 @@ export default function AddProductPage() {
             </div>
             <div className="p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Name */}
                 <div className="space-y-2">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     Product Name
@@ -104,6 +95,7 @@ export default function AddProductPage() {
                   />
                 </div>
 
+                {/* Description */}
                 <div className="space-y-2">
                   <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                     Description
@@ -120,6 +112,7 @@ export default function AddProductPage() {
                   />
                 </div>
 
+                {/* Price */}
                 <div className="space-y-2">
                   <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                     Price ($)
@@ -137,6 +130,7 @@ export default function AddProductPage() {
                   />
                 </div>
 
+                {/* Image */}
                 <div className="space-y-2">
                   <label htmlFor="image" className="block text-sm font-medium text-gray-700">
                     Image URL
@@ -153,6 +147,7 @@ export default function AddProductPage() {
                   />
                 </div>
 
+                {/* Buttons */}
                 <div className="flex space-x-4">
                   <button
                     type="submit"

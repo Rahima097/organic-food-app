@@ -25,7 +25,7 @@ export default function ProductHighlights() {
         if (response.ok) {
           const products = await response.json()
           // Get first 3 products as featured
-          setFeaturedProducts(products.slice(0, 3))
+          setFeaturedProducts(products.slice(0, 6))
         }
       } catch (error) {
         console.error("Error fetching featured products:", error)
@@ -74,7 +74,7 @@ export default function ProductHighlights() {
 
           {loading ? (
             <div className="grid md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
+              {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div key={i} className="bg-white border border-gray-200 rounded-lg p-6">
                   <div className="animate-pulse">
                     <div className="bg-gray-200 h-48 rounded-lg mb-4"></div>
